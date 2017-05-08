@@ -13,11 +13,24 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
+from tastypie.api import Api
 from django.contrib import admin
+from evento.api.resources import *
 
 from evento.views import *
 
+v1_api = Api(api_name='v1')
+v1_api.register(TipoInscricaoResource())
+v1_api.register(UserResource())
+v1_api.register(InscricaoResource())
+v1_api.register(PessoaFisicaResource())
+v1_api.register(PessoaResource())
+v1_api.register(ArtigoAutorResource())
+v1_api.register(ArtigoCientificoResource())
+v1_api.register(PessoaJuridicaResource())
+v1_api.register(EventoResource())
+v1_api.register(EventoCientificoResource())
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', index, name='index'),
@@ -36,4 +49,5 @@ urlpatterns = [
     url(r'^artigoscientificos/', listaArtigosCientificos, name='listaArtigosCientificos'),
     url(r'^artigocientifico/([0-9]{1})', artigocientificoid, name='artigocientificoid'),
     url(r'^eventoinscricoes/([0-9]{1})', listainscricoes, name='listainscricoes'),
+    url(r'^api/', include(v1_api.urls)),
 ]
